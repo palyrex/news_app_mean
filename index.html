@@ -10,8 +10,8 @@
     {{test}}
   </section>
 
-  <section ng-repeat="post in posts">
-    {{post}}
+  <section ng-repeat="post in posts | orderBy :'-upvotes'">
+    {{post.title}} - upvotes: {{post.upvotes}}
   </section>
 
 </body>

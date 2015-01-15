@@ -17,6 +17,13 @@ describe("Main controller", function() {
   it("contain posts", function() {
     var $scope = {};
     var controller = $controller('MainCtrl', {$scope: $scope });
-    expect($scope.posts[0]).toEqual('post 1')
+    expect($scope.posts.length).toEqual(5)
+  });
+
+  it("contain posts title and upvotes", function() {
+    var $scope = {};
+    var controller = $controller('MainCtrl', {$scope: $scope });
+    expect($scope.posts[0].title).toEqual('post 1')
+    expect($scope.posts[0].upvotes).toEqual(5)
   });
 });
