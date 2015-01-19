@@ -26,4 +26,12 @@ describe("Main controller", function() {
     expect($scope.posts[0].title).toEqual('post 1')
     expect($scope.posts[0].upvotes).toEqual(5)
   });
+
+  it("receives user input", function() {
+    var $scope = {};
+    var controller = $controller('MainCtrl', {$scope: $scope });
+    expect($scope.posts.length).toEqual(5)
+    $scope.addPost()
+    expect($scope.posts.length).toEqual(6)
+  });
 });
