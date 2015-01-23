@@ -8,30 +8,43 @@ describe("Main controller", function() {
     $controller = _$controller_;
   }));
 
+  var $scope;
+  var controller;
+
+  beforeEach(function() {
+    $scope = {};
+    controller = $controller('MainCtrl', {$scope: $scope });
+  });
+
+
   it("says hello world", function() {
-    var $scope = {};
-    var controller = $controller('MainCtrl', {$scope: $scope });
-    expect($scope.test).toEqual('Hello world!')
+    expect($scope.test).toEqual('Hello world!');
   });
 
   it("contain posts", function() {
-    var $scope = {};
-    var controller = $controller('MainCtrl', {$scope: $scope });
-    expect($scope.posts.length).toEqual(5)
+    expect($scope.posts.length).toEqual(5);
   });
 
   it("contain posts title and upvotes", function() {
-    var $scope = {};
-    var controller = $controller('MainCtrl', {$scope: $scope });
-    expect($scope.posts[0].title).toEqual('post 1')
-    expect($scope.posts[0].upvotes).toEqual(5)
+    expect($scope.posts[0].title).toEqual('post 1');
+    expect($scope.posts[0].upvotes).toEqual(5);
   });
 
   it("receives user input", function() {
-    var $scope = {};
-    var controller = $controller('MainCtrl', {$scope: $scope });
-    expect($scope.posts.length).toEqual(5)
-    $scope.addPost()
-    expect($scope.posts.length).toEqual(6)
+    expect($scope.posts.length).toEqual(5);
+    $scope.title = "Hello Jack";
+    $scope.addPost();
+    expect($scope.posts.length).toEqual(6);
   });
+
+  it("doesn't display empty user input", function() {
+    $scope.addPost();
+    expect($scope.posts.length).toEqual(5);
+  });
+
+  it("increment upvotes for post", function() {
+    $scope.incrementUpvotes($scope.posts[0]);
+    expect($scope.posts[0].upvotes).toEqual(6);
+  });
+
 });
