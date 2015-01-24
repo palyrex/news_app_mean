@@ -1,6 +1,6 @@
 describe("Main controller", function() {
 
-  beforeEach(module('flapperNews'));
+  beforeEach(module('angularNews'));
 
   var $controller;
 
@@ -14,11 +14,6 @@ describe("Main controller", function() {
   beforeEach(function() {
     $scope = {};
     controller = $controller('MainCtrl', {$scope: $scope });
-  });
-
-
-  it("says hello world", function() {
-    expect($scope.test).toEqual('Hello world!');
   });
 
   it("contain posts", function() {
