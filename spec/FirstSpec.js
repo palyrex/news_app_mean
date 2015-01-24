@@ -35,6 +35,7 @@ describe("Main controller", function() {
     $scope.title = "Hello Jack";
     $scope.addPost();
     expect($scope.posts.length).toEqual(6);
+    expect($scope.posts[5].title).toEqual("Hello Jack");
   });
 
   it("doesn't display empty user input", function() {
@@ -47,4 +48,11 @@ describe("Main controller", function() {
     expect($scope.posts[0].upvotes).toEqual(6);
   });
 
+  it("adds link to post", function() {
+    $scope.title = "MA";
+    $scope.link = "makersacademy.com";
+    $scope.addPost();
+    expect($scope.posts[5].title).toEqual("MA");
+    expect($scope.posts[5].link).toEqual("makersacademy.com");
+  });
 });
