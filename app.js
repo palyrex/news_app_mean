@@ -1,4 +1,17 @@
-angular.module('angularNews', [])
+angular.module('angularNews', ['ui.router'])
+.config([
+'$stateProvider',
+'$$urlRouteProvider',
+function($stateProvider, $urlRouteProvider) {
+  $stateProvider
+  .state('home', {
+    url: '/home',
+    templateUrl: '/home.html',
+    controller: 'MainCtrl'
+  });
+
+  $urlRouteProvider.otherwise('home');
+}])
 .service('posts', [function() {
   var o = {
     posts: [
