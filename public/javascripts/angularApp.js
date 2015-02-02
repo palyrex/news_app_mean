@@ -17,17 +17,24 @@ function($stateProvider, $urlRouteProvider) {
   .state('posts', {
     url: '/posts{id}',
     templateUrl: '/posts.html',
-    controller: 'PostsCtrl'
+    controller: 'PostsCtrl',
+    resolve: {
+      post: [$stateParams, 'posts', function($stateParams, posts) {
+        return posts.get($stateParams.id);
+      }]
+    }
   });
 
   $urlRouteProvider.otherwise('home');
 }])
+
 .service('posts', [$http, function($http) {
   var o = {
     posts: []
   };
   return o;
 }])
+
 .controller('MainCtrl', [
 '$scope',
 'posts', 
@@ -45,24 +52,30 @@ function($scope, posts){
   };
 
   $scope.incrementUpvotes = function(post) {
-    post.upvotes += 1;
+    posts.upvote(post);
   };
 }])
+
 .controller('PostsCtrl', [
 '$scope',
-'$stateParams',
 'posts',
-function($scope, $stateParams, posts) {
-  $scope.posts = posts.posts[$stateParam.id];
+'post',
+function($scope, posts, post) {
+  $scope.post = post;
 
   $scope.addComment = function() {
-    if($scope.body ==='') { return; }
-    $scope.posts.comments.push({
+    if($scope.body === '') { return; }
+    posts.addComment( post._id, {
       body: $scope.body,
       author: 'user',
-      upvotes: 0
+    }).success(function(comment) {
+      $scope.post.comment.push(comment);
     });
     $scope.body = '';
+  };
+
+  $scope.incrementUpvotes = function(comment) {
+    posts.upvoteComment(post, comment);
   };
 }]);
 
@@ -77,3 +90,27 @@ o.create = function(post) {
     o.posts.push(data);
   });
 };
+
+o.upvote = function(post) {
+  return $http.put('/posts' + post._id + '/upvote')
+    .success(function(data) {
+      post.upvotes += 1;
+    });
+  };
+
+o.get = function(id) {
+  return $http.get('/posts' + id).then(function(res) {
+    return res.data;
+  });
+};
+
+o.addComment = function(id, comment) {
+  return $http.post('/posts/' + id + '/comments', comment);
+};
+
+o.upvoteComment = function(post,comment) {
+  return $http.put('/posts/' + post._id + '/comments/' + comment._id + '/upvotes')
+    .success(function(data) {
+      comment.upvotes += 1;
+    });
+  };
