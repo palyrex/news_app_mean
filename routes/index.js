@@ -1,8 +1,15 @@
 var mongoose = require('mongoose');
+var express = require('express');
+var router = express.Router;
+
+router.get('/', function(req, res) {
+  res.render('index');
+});
+
 var Post = mongoose.model('Post');
 var Comment = mongoose.model('Comment');
 
-app.get('/posts', function(req, res, next) {
+router.get('/posts', function(req, res, next) {
 	Post.find(function(err, posts) {
 		if(err){return next(err);}
 
@@ -10,7 +17,7 @@ app.get('/posts', function(req, res, next) {
 	});
 });
 
-app.post('/posts', function(req, res, next) {
+router.post('/posts', function(req, res, next) {
 	var post = new Post(req.body);
 
 	post.save(function(err, post) {
@@ -20,7 +27,7 @@ app.post('/posts', function(req, res, next) {
 	});
 });
 
-app.param('post', function(req, res, next, id) {
+router.param('post', function(req, res, next, id) {
 	var query = Post.findById(id);
 
 	query.exec(function(err, post) {
@@ -32,13 +39,13 @@ app.param('post', function(req, res, next, id) {
 	});
 });
 
-app.get('/posts/:post', function(req, res, next) {
+router.get('/posts/:post', function(req, res, next) {
 	req.post.populate('comments', function(err, post) {
 		res.json(post);
 	});
 });
 
-app.put('/posts/:post/upvote', function(req, res, next) {
+router.put('/posts/:post/upvote', function(req, res, next) {
 	req.post.upvote(function(err, post) {
 		if(err) {return next(err);}
 
@@ -46,7 +53,7 @@ app.put('/posts/:post/upvote', function(req, res, next) {
 	});
 });
 
-app.post('/posts/:post/comments', function(req, res, next) {
+router.post('/posts/:post/comments', function(req, res, next) {
 	var comment = new Comment(req.body);
 	comment.post = req.post;
 
@@ -62,7 +69,7 @@ app.post('/posts/:post/comments', function(req, res, next) {
 	}); 
 });
 
-app.param('comment', function(req, res, next, id) {
+router.param('comment', function(req, res, next, id) {
   var query = Comment.findById(id);
 
   query.exec(function (err, comment){

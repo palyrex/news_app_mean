@@ -17,27 +17,7 @@ require('./models/Comments.js');
 var Post = mongoose.model('Post');
 var Comment = mongoose.model('Comment');
 
-app.get('/', function(req, res) {
-  res.render('index');
-});
-
-app.get('/posts', function(req, res, next) {
-    Post.find(function(err, posts) {
-        if(err){return next(err);}
-
-        res.json(posts);
-    });
-});
-
-app.post('/posts', function(req, res, next) {
-    var post = new Post(req.body);
-
-    post.save(function(err, post) {
-        if(err){return next(err);}
-
-        res.json(post);
-    });
-});
+var routes = require('./routes/index');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
